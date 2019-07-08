@@ -3,7 +3,8 @@
 
 int n, m;
 int* values = new int;
-int* moves = new int;
+int* colors = new int;
+
 
 namespace idz2 {
 
@@ -138,7 +139,7 @@ namespace idz2 {
 			// 
 			// pictureBox3
 			// 
-			this->pictureBox3->Location = System::Drawing::Point(147, 817);
+			this->pictureBox3->Location = System::Drawing::Point(1047, 375);
 			this->pictureBox3->Name = L"pictureBox3";
 			this->pictureBox3->Size = System::Drawing::Size(391, 124);
 			this->pictureBox3->TabIndex = 7;
@@ -146,7 +147,7 @@ namespace idz2 {
 			// 
 			// pictureBox4
 			// 
-			this->pictureBox4->Location = System::Drawing::Point(544, 817);
+			this->pictureBox4->Location = System::Drawing::Point(1047, 528);
 			this->pictureBox4->Name = L"pictureBox4";
 			this->pictureBox4->Size = System::Drawing::Size(391, 124);
 			this->pictureBox4->TabIndex = 8;
@@ -156,7 +157,7 @@ namespace idz2 {
 			// 
 			this->pictureBox2->Location = System::Drawing::Point(136, 357);
 			this->pictureBox2->Name = L"pictureBox2";
-			this->pictureBox2->Size = System::Drawing::Size(1785, 454);
+			this->pictureBox2->Size = System::Drawing::Size(864, 454);
 			this->pictureBox2->TabIndex = 9;
 			this->pictureBox2->TabStop = false;
 			// 
@@ -205,7 +206,7 @@ namespace idz2 {
 				values = new int[m];
 				mytree.create_values(values);
 				Paint_Tree(k);
-				Paint_Fractal(k);
+				Paint_Fractal(k, n);
 			}
 		}
 		else 
@@ -213,6 +214,7 @@ namespace idz2 {
 	}
 private: System::Void Button2_Click(System::Object^ sender, System::EventArgs^ e) {
 	pictureBox1->Refresh();
+	pictureBox2->Refresh();
 	label2->Text = " ";
 }
 private: void Paint_Tree(int n)
@@ -307,115 +309,616 @@ private: void Paint_Tree(int n)
 		}
 	}
 }
-private: void Paint_Fractal10(int step, int* x, int* y)
+private: void Paint_Fractal10(int step, int* x, int* y, Color mycolor)
 {
 	Graphics^ Графика = pictureBox2->CreateGraphics();
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x, *y + step);
+	Pen^ mypen = gcnew Pen(mycolor);
+	Графика->DrawLine(mypen, *x, *y, *x, *y + step);
 	*y += step;
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x + step, *y);
+	Графика->DrawLine(mypen, *x, *y, *x + step, *y);
 	*x += step;
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x, *y - step);
+	Графика->DrawLine(mypen, *x, *y, *x, *y - step);
 	*y -= step;
 }
-private: void Paint_Fractal11(int step, int* x, int* y)
+private: void Paint_Fractal11(int step, int* x, int* y, Color mycolor)
 {
 	Graphics^ Графика = pictureBox2->CreateGraphics();
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x + step, *y);
+	Pen^ mypen = gcnew Pen(mycolor);
+	Графика->DrawLine(mypen, *x, *y, *x + step, *y);
 	*x += step;
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x, *y + step);
+	Графика->DrawLine(mypen, *x, *y, *x, *y + step);
 	*y += step;
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x - step, *y);
+	Графика->DrawLine(mypen, *x, *y, *x - step, *y);
 	*x -= step;
 }
-private: void Paint_Fractal12(int step, int* x, int* y)
+private: void Paint_Fractal12(int step, int* x, int* y, Color mycolor)
 {
 	Graphics^ Графика = pictureBox2->CreateGraphics();
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x, *y - step);
+	Pen^ mypen = gcnew Pen(mycolor);
+	Графика->DrawLine(mypen, *x, *y, *x, *y - step);
 	*y -= step;
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x - step, *y);
+	Графика->DrawLine(mypen, *x, *y, *x - step, *y);
 	*x -= step;
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x, *y + step);
+	Графика->DrawLine(mypen, *x, *y, *x, *y + step);
 	*y += step;
 }
-private: void Paint_Fractal13(int step, int* x, int* y)
+private: void Paint_Fractal13(int step, int* x, int* y, Color mycolor)
 {
 	Graphics^ Графика = pictureBox2->CreateGraphics();
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x - step, *y);
+	Pen^ mypen = gcnew Pen(mycolor);
+	Графика->DrawLine(mypen, *x, *y, *x - step, *y);
 	*x -= step;
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x, *y - step);
+	Графика->DrawLine(mypen, *x, *y, *x, *y - step);
 	*y -= step;
-	Графика->DrawLine(System::Drawing::Pens::Red, *x, *y, *x + step, *y);
+	Графика->DrawLine(mypen, *x, *y, *x + step, *y);
 	*x += step;
 }
-	private: void Paint_Fractal(int k)
+	private: void Paint_Fractal(int k, int n)
 	{
+		Color fract_color;
+		Color fract;
+		Pen^ secondpen;
+		Color secondcolor;
+		colors = new int[m];
+		if (k == 1)
+			colors[0] = 1;
+		if (k == 2)
+		{
+			colors[0] = 2;
+			colors[1] = 1;
+			colors[2] = 2;
+			colors[3] = 2;
+		}
+		if (k == 3)
+		{
+			for (int i = 0; i < 4; i++)
+				colors[i] = 3;
+			colors[4] = 2;
+			colors[5] = 1;
+			colors[6] = 2;
+			colors[7] = 2;
+			for (int i = 8; i < m; i++)
+				colors[i] = 3;
+		}
+		if (k == 4)
+		{
+			for (int i = 0; i < 16; i++)
+				colors[i] = 4;
+			for (int i = 16; i < 20; i++)
+				colors[i] = 3;
+			colors[20] = 2;
+			colors[21] = 1;
+			colors[22] = 2;
+			colors[23] = 2;
+			for (int i = 24; i < 32; i++)
+				colors[i] = 3;
+			for (int i = 32; i < m; i++)
+				colors[i] = 4;
+		}
+		if (k == 5)
+		{
+			for (int i = 0; i < 64; i++)
+				colors[i] = 5;
+			for (int i = 64; i < 80; i++)
+				colors[i] = 4;
+			for (int i = 80; i < 84; i++)
+				colors[i] = 3;
+			colors[84] = 2;
+			colors[85] = 1;
+			colors[86] = 2;
+			colors[87] = 2;
+			for (int i = 88; i < 96; i++)
+				colors[i] = 3;
+			for (int i = 96; i < 128; i++)
+				colors[i] = 4;
+			for (int i = 128; i < m; i++)
+				colors[i] = 5;
+		}
+		if (k == 6)
+		{
+			for (int i = 0; i < 256; i++)
+				colors[i] = 6;
+			for (int i = 256; i < 320; i++)
+				colors[i] = 5;
+			for (int i = 320; i < 336; i++)
+				colors[i] = 4;
+			for (int i = 336; i < 340; i++)
+				colors[i] = 3;
+			colors[340] = 2;
+			colors[341] = 1;
+			colors[342] = 2;
+			colors[343] = 2;
+			for (int i = 344; i < 352; i++)
+				colors[i] = 3;
+			for (int i = 352; i < 384; i++)
+				colors[i] = 4;
+			for (int i = 384; i < 512; i++)
+				colors[i] = 5;
+			for (int i = 512; i < m; i++)
+				colors[i] = 6;
+		}
 		Graphics^ Графика = pictureBox2->CreateGraphics();
-		int x0 = (k - 1) * 160;
-		int m1 = 1;
-		for (int i = 0; i < k; i++)
-			m1 *= 2;
-		int x = x0 + (64 / m1);
-		int y = 64 / m1;
-		int step = 128 / m1;
+		if (k == 1)
+			fract_color = Color::Red;
+		if (k == 2)
+			fract_color = Color::Blue;
+		if (k == 3)
+			fract_color = Color::Green;
+		if (k == 4)
+			fract_color = Color::Yellow;
+		if (k == 5)
+			fract_color = Color::Violet;
+		if (k == 6)
+			fract_color = Color::Cyan;
+		Pen^ mypen = gcnew Pen(fract_color);
+		Pen^ linepen = gcnew Pen(Color::Black);
+		if (n == 2)
+			Графика->DrawLine(linepen, 224, 0, 224, 500);
+		if (n == 3)
+		{
+			Графика->DrawLine(linepen, 224, 0, 224, 500);
+			Графика->DrawLine(linepen, 0, 144, 224, 144);
+		}
+		if (n == 4)
+		{
+			Графика->DrawLine(linepen, 344, 0, 344, 500);
+			Графика->DrawLine(linepen, 0, 184, 344, 184);
+			Графика->DrawLine(linepen, 164, 0, 164, 184);
+
+		}
+		if (n == 5)
+		{
+			Графика->DrawLine(linepen, 354, 0, 354, 500);
+			Графика->DrawLine(linepen, 0, 184, 354, 184);
+			Графика->DrawLine(linepen, 164, 0, 164, 184);
+			Графика->DrawLine(linepen, 0, 100, 164, 100);
+		}
+		if (n == 6)
+		{
+			Графика->DrawLine(linepen, 354, 0, 354, 500);
+			Графика->DrawLine(linepen, 0, 196, 354, 196);
+			Графика->DrawLine(linepen, 196, 0, 196, 196);
+			Графика->DrawLine(linepen, 0, 116, 196, 116);
+			Графика->DrawLine(linepen, 106, 0, 106, 116);
+		}
+		int step;
+		int x; 
+		int y;
+		if (k == 1)
+		{
+			x = 64;
+			y = 64;
+			if ((n == 1) || (n == 2))
+				step = 128;
+			if ((n == 3) || (n == 4))
+				step = 64;
+			if ((n == 5) || (n == 6))
+				step = 32;
+		}
+		if (k == 2)
+		{
+			if (n == 2)
+			{
+				x = 384;
+				y = 64;
+				step = 64;
+			}
+			if (n == 3)
+			{
+				x = 64;
+				y = 224;
+				step = 32;
+			}
+			if (n == 4)
+			{
+				x = 224;
+				y = 64;
+				step = 32;
+			}
+			if (n == 5)
+			{
+				x = 64;
+				y = 112;
+				step = 16;
+			}
+			if (n == 6)
+			{
+				x = 144;
+				y = 64;
+				step = 16;
+			}
+		}
+		if (k == 3)
+		{
+			if (n == 3)
+			{
+				x = 384;
+				y = 64;
+				step = 32;
+			}
+			if (n == 4)
+			{
+				x = 64;
+				y = 224;
+				step = 16;
+			}
+			if (n == 5)
+			{
+				x = 224;
+				y = 64;
+				step = 16;
+			}
+			if (n == 6)
+			{
+				x = 64;
+				y = 128;
+				step = 8;
+			}
+		}
+		if (k == 4)
+		{
+			if (n == 4)
+			{
+				x = 384;
+				y = 64;
+				step = 16;
+			}
+			if (n == 5)
+			{
+				x = 64;
+				y = 224;
+				step = 8;
+			}
+			if (n == 6)
+			{
+				x = 224;
+				y = 64;
+				step = 8;
+			}
+		}
+		if (k == 5)
+		{
+			if (n == 5)
+			{
+				x = 384;
+				y = 64;
+				step = 8;
+			}
+			if (n == 6)
+			{
+				x = 64;
+				y = 224;
+				step = 4;
+			}
+		}
+		if (k == 6)
+		{
+			if (n == 6)
+			{
+				x = 384;
+				y = 64;
+				step = 4;
+			}
+		}
 		for (int i = 0; i < m; i++)
 		{
+			if (colors[i] == 1)
+				fract = Color::Red;
+			if (colors[i] == 2)
+				fract = Color::Blue;
+			if (colors[i] == 3)
+				fract = Color::Green;
+			if (colors[i] == 4)
+				fract = Color::Yellow;
+			if (colors[i] == 5)
+				fract = Color::Violet;
+			if (colors[i] == 6)
+				fract = Color::Cyan;
 			if (values[i] == 0)
 			{
-				Paint_Fractal10(step, &x, &y);
+				Paint_Fractal10(step, &x, &y, fract);
 				if (i != m - 1)
 					if ((values[i + 1] == 0) || (values[i + 1] == 1))
 					{
-						Графика->DrawLine(System::Drawing::Pens::Red, x, y, x + step, y);
+						if (colors[i] < colors[i + 1])
+						{
+							if (colors[i + 1] == 1)
+								secondcolor = Color::Red;
+							if (colors[i + 1] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i + 1] == 3)
+								secondcolor = Color::Green;
+							if (colors[i + 1] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i + 1] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i + 1] == 6)
+								secondcolor = Color::Cyan;
+						}
+						else
+						{
+							if (colors[i] == 1)
+								secondcolor = Color::Red;
+							if (colors[i] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i] == 3)
+								secondcolor = Color::Green;
+							if (colors[i] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i] == 6)
+								secondcolor = Color::Cyan;
+						}
+						secondpen = gcnew Pen(secondcolor);
+						Графика->DrawLine(secondpen, x, y, x + step, y);
 						x += step;
 					}
 					else
 					{
-						Графика->DrawLine(System::Drawing::Pens::Red, x, y, x, y - step);
+						if (colors[i] < colors[i + 1])
+						{
+							if (colors[i + 1] == 1)
+								secondcolor = Color::Red;
+							if (colors[i + 1] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i + 1] == 3)
+								secondcolor = Color::Green;
+							if (colors[i + 1] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i + 1] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i + 1] == 6)
+								secondcolor = Color::Cyan;
+						}
+						else
+						{
+							if (colors[i] == 1)
+								secondcolor = Color::Red;
+							if (colors[i] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i] == 3)
+								secondcolor = Color::Green;
+							if (colors[i] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i] == 6)
+								secondcolor = Color::Cyan;
+						}
+						secondpen = gcnew Pen(secondcolor);
+						Графика->DrawLine(secondpen, x, y, x, y - step);
 						y -= step;
 					}
 			}
 			if (values[i] == 1)
 			{
-				Paint_Fractal11(step, &x, &y);
+				Paint_Fractal11(step, &x, &y, fract);
 				if (i != m - 1)
 					if ((values[i + 1] == 0) || (values[i + 1] == 1))
 					{
-						Графика->DrawLine(System::Drawing::Pens::Red, x, y, x, y + step);
+						if (colors[i] < colors[i + 1])
+						{
+							if (colors[i + 1] == 1)
+								secondcolor = Color::Red;
+							if (colors[i + 1] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i + 1] == 3)
+								secondcolor = Color::Green;
+							if (colors[i + 1] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i + 1] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i + 1] == 6)
+								secondcolor = Color::Cyan;
+						}
+						else
+						{
+							if (colors[i] == 1)
+								secondcolor = Color::Red;
+							if (colors[i] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i] == 3)
+								secondcolor = Color::Green;
+							if (colors[i] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i] == 6)
+								secondcolor = Color::Cyan;
+						}
+						secondpen = gcnew Pen(secondcolor);
+						Графика->DrawLine(secondpen, x, y, x, y + step);
 						y += step;
 					}
 					else
 					{
-						Графика->DrawLine(System::Drawing::Pens::Red, x, y, x - step, y);
+						if (colors[i] < colors[i + 1])
+						{
+							if (colors[i + 1] == 1)
+								secondcolor = Color::Red;
+							if (colors[i + 1] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i + 1] == 3)
+								secondcolor = Color::Green;
+							if (colors[i + 1] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i + 1] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i + 1] == 6)
+								secondcolor = Color::Cyan;
+						}
+						else
+						{
+							if (colors[i] == 1)
+								secondcolor = Color::Red;
+							if (colors[i] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i] == 3)
+								secondcolor = Color::Green;
+							if (colors[i] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i] == 6)
+								secondcolor = Color::Cyan;
+						}
+						secondpen = gcnew Pen(secondcolor);
+						Графика->DrawLine(secondpen, x, y, x - step, y);
 						x -= step;
 					}
 			}
 			if (values[i] == 2)
 			{
-				Paint_Fractal12(step, &x, &y);
+				Paint_Fractal12(step, &x, &y, fract);
 				if (i != m - 1)
 					if ((values[i + 1] == 2) || (values[i + 1] == 3))
 					{
-						Графика->DrawLine(System::Drawing::Pens::Red, x, y, x - step, y);
+						if (colors[i] < colors[i + 1])
+						{
+							if (colors[i + 1] == 1)
+								secondcolor = Color::Red;
+							if (colors[i + 1] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i + 1] == 3)
+								secondcolor = Color::Green;
+							if (colors[i + 1] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i + 1] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i + 1] == 6)
+								secondcolor = Color::Cyan;
+						}
+						else
+						{
+							if (colors[i] == 1)
+								secondcolor = Color::Red;
+							if (colors[i] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i] == 3)
+								secondcolor = Color::Green;
+							if (colors[i] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i] == 6)
+								secondcolor = Color::Cyan;
+						}
+						secondpen = gcnew Pen(secondcolor);
+						Графика->DrawLine(secondpen, x, y, x - step, y);
 						x -= step;
 					}
 					else
 					{
-						Графика->DrawLine(System::Drawing::Pens::Red, x, y, x, y + step);
+						if (colors[i] < colors[i + 1])
+						{
+							if (colors[i + 1] == 1)
+								secondcolor = Color::Red;
+							if (colors[i + 1] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i + 1] == 3)
+								secondcolor = Color::Green;
+							if (colors[i + 1] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i + 1] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i + 1] == 6)
+								secondcolor = Color::Cyan;
+						}
+						else
+						{
+							if (colors[i] == 1)
+								secondcolor = Color::Red;
+							if (colors[i] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i] == 3)
+								secondcolor = Color::Green;
+							if (colors[i] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i] == 6)
+								secondcolor = Color::Cyan;
+						}
+						secondpen = gcnew Pen(secondcolor);
+						Графика->DrawLine(secondpen, x, y, x, y + step);
 						y += step;
 					}
 			}
 			if (values[i] == 3)
 			{
-				Paint_Fractal13(step, &x, &y);
+				Paint_Fractal13(step, &x, &y, fract);
 				if (i != m - 1)
 					if ((values[i + 1] == 2) || (values[i + 1] == 3))
 					{
-						Графика->DrawLine(System::Drawing::Pens::Red, x, y, x, y - step);
+						if (colors[i] < colors[i + 1])
+						{
+							if (colors[i + 1] == 1)
+								secondcolor = Color::Red;
+							if (colors[i + 1] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i + 1] == 3)
+								secondcolor = Color::Green;
+							if (colors[i + 1] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i + 1] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i + 1] == 6)
+								secondcolor = Color::Cyan;
+						}
+						else
+						{
+							if (colors[i] == 1)
+								secondcolor = Color::Red;
+							if (colors[i] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i] == 3)
+								secondcolor = Color::Green;
+							if (colors[i] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i] == 6)
+								secondcolor = Color::Cyan;
+						}
+						secondpen = gcnew Pen(secondcolor);
+						Графика->DrawLine(secondpen, x, y, x, y - step);
 						y -= step;
 					}
 					else
 					{
-						Графика->DrawLine(System::Drawing::Pens::Red, x, y, x + step, y);
+						if (colors[i] < colors[i + 1])
+						{
+							if (colors[i + 1] == 1)
+								secondcolor = Color::Red;
+							if (colors[i + 1] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i + 1] == 3)
+								secondcolor = Color::Green;
+							if (colors[i + 1] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i + 1] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i + 1] == 6)
+								secondcolor = Color::Cyan;
+						}
+						else
+						{
+							if (colors[i] == 1)
+								secondcolor = Color::Red;
+							if (colors[i] == 2)
+								secondcolor = Color::Blue;
+							if (colors[i] == 3)
+								secondcolor = Color::Green;
+							if (colors[i] == 4)
+								secondcolor = Color::Yellow;
+							if (colors[i] == 5)
+								secondcolor = Color::Violet;
+							if (colors[i] == 6)
+								secondcolor = Color::Cyan;
+						}
+						secondpen = gcnew Pen(secondcolor);
+						Графика->DrawLine(secondpen, x, y, x + step, y);
 						x += step;
 					}
 			}
